@@ -9,6 +9,10 @@ Notifications =
   lastNotification: null
 
   activate: (state) ->
+    if not atom.packages.isPackageDisabled('notifications')
+      attemptToDisableAtomNotifications()
+      return
+
     CommandLogger = require './command-logger'
     CommandLogger.start()
     @subscriptions = new CompositeDisposable
@@ -96,6 +100,19 @@ Notifications =
 
     notification.setDisplayed(true)
     @lastNotification = notification
+
+attemptToDisableAtomNotifications = ->
+  atom.notifications.addWarning 'Learn IDE: incorrect notification package enabled',
+    detail: 'In order for the Learn IDE to work properly, please disable Atom\'s core
+             Notifications package. Please do not report any errors until you have disabled it.'
+    dismissable: true
+    description: 'Click below to disable it and restart the app. This can be undone in your preferences at any time.'
+    buttons: [
+      text: 'Disable & Restart'
+      onDidClick: ->
+        atom.packages.disablePackage('notifications')
+        atom.restartApplication()
+    ]
 
 isCoreOrPackageStackTrace = (stack) ->
   StackTraceParser ?= require 'stacktrace-parser'

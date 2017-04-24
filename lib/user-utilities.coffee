@@ -108,14 +108,18 @@ module.exports =
       devPackageNames = atom.packages.getAvailablePackagePaths().filter((p) -> p.includes(DEV_PACKAGE_PATH)).map((p) -> path.basename(p))
       resolve("#{pack.name} #{pack.version} #{if pack.name in devPackageNames then '(dev)' else ''}" for pack in nonCorePackages)
 
-  getLatestAtomData: ->
-    fetch 'https://atom.io/api/updates', {headers: githubHeaders}
-      .then (r) -> if r.ok then r.json() else Promise.reject r.statusCode
+  getLatestLearnIDEData: ->
+    fetch('https://learn.co/api/v1/learn_ide/latest_version')
+      .then (r) -> if r.ok then r.json() else Promise.reject(r.statusCode)
+
+  currentLearnIDEVersion: ->
+    pkg = atom.packages.loadPackage('learn-ide')
+    pkg?.metadata.version
 
   checkAtomUpToDate: ->
-    @getLatestAtomData().then (latestAtomData) ->
-      installedVersion = atom.getVersion()?.replace(/-.*$/, '')
-      latestVersion = latestAtomData.name
+    @getLatestLearnIDEData().then ({version}) =>
+      installedVersion = @currentLearnIDEVersion()
+      latestVersion = version
       upToDate = installedVersion? and semver.gte(installedVersion, latestVersion)
       {upToDate, latestVersion, installedVersion}
 

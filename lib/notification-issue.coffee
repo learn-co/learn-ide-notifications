@@ -20,7 +20,7 @@ class NotificationIssue
 
   findSimilarIssues: ->
     repoUrl = @getRepoUrl()
-    repoUrl = 'atom/atom' unless repoUrl?
+    repoUrl = 'learn-co/learn-ide' unless repoUrl?
     repo = repoUrl.replace /http(s)?:\/\/(\d+\.)?github.com\//gi, ''
     issueTitle = @getIssueTitle()
     query = "#{issueTitle} repo:#{repo}"
@@ -54,7 +54,7 @@ class NotificationIssue
   getIssueUrl: ->
     @getIssueBody().then (issueBody) =>
       repoUrl = @getRepoUrl()
-      repoUrl = 'https://github.com/atom/atom' unless repoUrl?
+      repoUrl = 'https://github.com/learn-co/learn-ide' unless repoUrl?
       "#{repoUrl}/issues/new?title=#{@encodeURI(@getIssueTitle())}&body=#{@encodeURI(issueBody)}"
 
   encodeURI: (str) ->
@@ -102,12 +102,13 @@ class NotificationIssue
           packageMessage = 'Atom Core'
 
         @issueBody = """
-          [Enter steps to reproduce:]
+          [Before submitting, please enter steps to reproduce:]
 
           1. ...
           2. ...
 
-          **Atom**: #{atom.getVersion()} #{process.arch}
+          **Learn IDE Package**: #{LEARN_IDE_VERSION}
+          **Learn IDE Core**: #{atom.getVersion()} #{process.arch}
           **Electron**: #{process.versions.electron}
           **OS**: #{systemName}
           **Thrown From**: #{packageMessage}

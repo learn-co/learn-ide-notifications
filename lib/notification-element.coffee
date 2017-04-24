@@ -158,14 +158,14 @@ class NotificationElement extends HTMLElement
       issueButton.remove()
       fatalNotification.textContent = "The error was thrown from the #{packageName} package. "
     else
-      fatalNotification.textContent = "This is likely a bug in Atom. "
+      fatalNotification.textContent = "This is likely a bug in the Learn IDE. "
 
     # We only show the create issue button if it's clearly in atom core or in a package with a repo url
     if issueButton.parentNode?
       if packageName? and repoUrl?
         issueButton.textContent = "Create issue on the #{packageName} package"
       else
-        issueButton.textContent = "Create issue on atom/atom"
+        issueButton.textContent = "Create issue on learn-co/learn-ide"
 
       promises = []
       promises.push @issue.findSimilarIssues()

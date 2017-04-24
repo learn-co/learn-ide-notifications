@@ -1,9 +1,9 @@
 {
-  "name": "notifications",
+  "name": "learn-ide-notifications",
   "main": "./lib/main",
   "version": "0.66.1",
-  "description": "A tidy way to display Atom notifications.",
-  "repository": "https://github.com/atom/notifications",
+  "description": "A tidy fork of atom/notifications used by the Learn IDE",
+  "repository": "https://github.com/learn-co/learn-ide-notifications",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"

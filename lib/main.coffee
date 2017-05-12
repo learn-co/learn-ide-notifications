@@ -1,6 +1,8 @@
 {Notification, CompositeDisposable} = require 'atom'
 fs = require 'fs-plus'
 StackTraceParser = null
+{app} = require 'remote'
+coreAppIsAtom = app.getName().match(/atom/i)?
 
 Notifications =
   isInitialized: false
@@ -9,6 +11,16 @@ Notifications =
   lastNotification: null
 
   activate: (state) ->
+    if coreAppIsAtom
+      return
+
+    if not atom.packages.isPackageDisabled('notifications')
+      atom.packages.disablePackage('notifications')
+      atom.restartApplication()
+
+    @activateLearnIdeNotifications(state)
+
+  activateLearnIdeNotifications: (state) ->
     CommandLogger = require './command-logger'
     CommandLogger.start()
     @subscriptions = new CompositeDisposable
@@ -46,6 +58,9 @@ Notifications =
       notification.dismiss() for notification in atom.notifications.getNotifications()
 
   deactivate: ->
+    if coreAppIsAtom
+      return
+
     @subscriptions.dispose()
     @notificationsElement?.remove()
     @notificationsPanel?.destroy()

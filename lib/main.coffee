@@ -4,6 +4,12 @@ StackTraceParser = null
 {app} = require 'remote'
 coreAppIsAtom = app.getName().match(/atom/i)?
 
+isBundledPackageEnabled = (name) ->
+  isDisabled = atom.packages.isPackageDisabled(name)
+  isBundled = atom.packages.isBundledPackage(name)
+
+  isBundled and not isDisabled
+
 Notifications =
   isInitialized: false
   subscriptions: null
@@ -14,7 +20,7 @@ Notifications =
     if coreAppIsAtom
       return
 
-    if not atom.packages.isPackageDisabled('notifications')
+    if isBundledPackageEnabled('notifications')
       atom.packages.disablePackage('notifications')
       atom.restartApplication()
 
